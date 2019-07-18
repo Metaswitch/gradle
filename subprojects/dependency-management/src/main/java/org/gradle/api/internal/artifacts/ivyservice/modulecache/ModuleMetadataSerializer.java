@@ -45,6 +45,7 @@ import org.gradle.internal.component.external.model.DefaultModuleComponentIdenti
 import org.gradle.internal.component.external.model.DefaultShadowedCapability;
 import org.gradle.internal.component.external.model.ExternalDependencyDescriptor;
 import org.gradle.internal.component.external.model.ImmutableCapability;
+import org.gradle.internal.component.external.model.IvyModuleComponentIdentifier;
 import org.gradle.internal.component.external.model.ModuleComponentResolveMetadata;
 import org.gradle.internal.component.external.model.MutableComponentVariant;
 import org.gradle.internal.component.external.model.MutableModuleComponentResolveMetadata;
@@ -227,6 +228,7 @@ public class ModuleMetadataSerializer {
         private void writeId(ModuleComponentIdentifier componentIdentifier) throws IOException {
             writeString(componentIdentifier.getGroup());
             writeString(componentIdentifier.getModule());
+            writeNullableString(componentIdentifier instanceof IvyModuleComponentIdentifier ? ((IvyModuleComponentIdentifier) componentIdentifier).getBranch() : null);
             writeString(componentIdentifier.getVersion());
         }
 
@@ -538,6 +540,10 @@ public class ModuleMetadataSerializer {
             MutableIvyModuleResolveMetadata metadata = ivyMetadataFactory.create(id, dependencies, configurations, artifacts, excludes);
             readSharedInfo(metadata);
             String branch = readNullableString();
+            if (branch != null) {
+                // Replace metadata id with Ivy version, if we have a branch
+                metadata.setId(IvyModuleComponentIdentifier.newId(id.getModuleIdentifier(), id.getVersion(),  branch));
+            }
             metadata.setBranch(branch);
             metadata.setExtraAttributes(extraAttributes);
             metadata.setAttributes(attributes);
@@ -551,7 +557,15 @@ public class ModuleMetadataSerializer {
         }
 
         private ModuleComponentIdentifier readId() throws IOException {
-            return DefaultModuleComponentIdentifier.newId(DefaultModuleIdentifier.newId(readString(), readString()), readString());
+            final String group = readString();
+            final String name = readString();
+            final String branch = readNullableString();
+            if (branch == null) {
+                return DefaultModuleComponentIdentifier.newId(DefaultModuleIdentifier.newId(group, name), readString());
+            }
+            else {
+                return IvyModuleComponentIdentifier.newId(DefaultModuleIdentifier.newId(group, name), readString(),  branch);
+            }
         }
 
         private Map<NamespaceId, String> readExtraInfo() throws IOException {

@@ -92,6 +92,7 @@ private constructor(
      * @param configuration the optional configuration of the module to be added as a dependency.
      * @param classifier the optional classifier of the module artifact to be added as a dependency.
      * @param ext the optional extension of the module artifact to be added as a dependency.
+     * @param branch the optional branch of the module artifact to be added as a dependency.
      * @return The dependency.
      *
      * @see [DependencyHandler.add]
@@ -102,9 +103,10 @@ private constructor(
         version: String? = null,
         configuration: String? = null,
         classifier: String? = null,
-        ext: String? = null
+        ext: String? = null,
+        branch: String? = null
     ): ExternalModuleDependency =
-        dependencies.create(group, name, version, configuration, classifier, ext).apply { add(this@invoke, this) }
+        dependencies.create(group, name, version, configuration, classifier, ext, branch).apply { add(this@invoke, this) }
 
     /**
      * Adds a dependency to the given configuration.
@@ -115,6 +117,7 @@ private constructor(
      * @param configuration the optional configuration of the module to be added as a dependency.
      * @param classifier the optional classifier of the module artifact to be added as a dependency.
      * @param ext the optional extension of the module artifact to be added as a dependency.
+     * @param branch the optional branch of the module artifact to be added as a dependency.
      * @param dependencyConfiguration expression to use to configure the dependency.
      * @return The dependency.
      *
@@ -128,9 +131,10 @@ private constructor(
         configuration: String? = null,
         classifier: String? = null,
         ext: String? = null,
+        branch: String? = null,
         dependencyConfiguration: ExternalModuleDependency.() -> Unit
     ): ExternalModuleDependency =
-        dependencies.add(this, create(group, name, version, configuration, classifier, ext), dependencyConfiguration)
+        dependencies.add(this, create(group, name, version, configuration, classifier, ext, branch), dependencyConfiguration)
 
     /**
      * Adds a dependency to the given configuration.
@@ -174,6 +178,7 @@ private constructor(
      * @param configuration the optional configuration of the module to be added as a dependency.
      * @param classifier the optional classifier of the module artifact to be added as a dependency.
      * @param ext the optional extension of the module artifact to be added as a dependency.
+     * @param branch the optional branch of the module artifact to be added as a dependency.
      * @return The dependency.
      *
      * @see [DependencyHandler.add]
@@ -184,9 +189,10 @@ private constructor(
         version: String? = null,
         configuration: String? = null,
         classifier: String? = null,
-        ext: String? = null
+        ext: String? = null,
+        branch: String? = null
     ): ExternalModuleDependency =
-        create(group, name, version, configuration, classifier, ext).apply { add(this@invoke.name, this) }
+        create(group, name, version, configuration, classifier, ext, branch).apply { add(this@invoke.name, this) }
 
     /**
      * Adds a dependency to the given configuration.
@@ -197,6 +203,7 @@ private constructor(
      * @param configuration the optional configuration of the module to be added as a dependency.
      * @param classifier the optional classifier of the module artifact to be added as a dependency.
      * @param ext the optional extension of the module artifact to be added as a dependency.
+     * @param branch the optional branch of the module artifact to be added as a dependency.
      * @param dependencyConfiguration expression to use to configure the dependency.
      * @return The dependency.
      *
@@ -210,9 +217,10 @@ private constructor(
         configuration: String? = null,
         classifier: String? = null,
         ext: String? = null,
+        branch: String? = null,
         dependencyConfiguration: ExternalModuleDependency.() -> Unit
     ): ExternalModuleDependency =
-        add(this.name, create(group, name, version, configuration, classifier, ext), dependencyConfiguration)
+        add(this.name, create(group, name, version, configuration, classifier, ext, branch), dependencyConfiguration)
 
     /**
      * Adds a dependency to the given configuration.
