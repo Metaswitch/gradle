@@ -428,8 +428,7 @@ public class DynamicVersionResolver {
             if (requested instanceof IvyModuleComponentSelector) {
                 this.identifier = IvyModuleComponentIdentifier.newId(requested.getModuleIdentifier(), version,
                     ((IvyModuleComponentSelector) requested).getBranch());
-            }
-            else {
+            } else {
                 this.identifier = DefaultModuleComponentIdentifier.newId(requested.getModuleIdentifier(), version);
             }
         }

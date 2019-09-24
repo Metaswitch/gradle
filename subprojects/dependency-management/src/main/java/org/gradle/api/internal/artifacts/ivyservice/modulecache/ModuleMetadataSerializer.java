@@ -562,8 +562,7 @@ public class ModuleMetadataSerializer {
             final String branch = readNullableString();
             if (branch == null) {
                 return DefaultModuleComponentIdentifier.newId(DefaultModuleIdentifier.newId(group, name), readString());
-            }
-            else {
+            } else {
                 return IvyModuleComponentIdentifier.newId(DefaultModuleIdentifier.newId(group, name), readString(),  branch);
             }
         }
