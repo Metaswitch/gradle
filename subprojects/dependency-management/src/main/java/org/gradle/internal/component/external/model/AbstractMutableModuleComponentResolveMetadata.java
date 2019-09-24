@@ -117,8 +117,7 @@ public abstract class AbstractMutableModuleComponentResolveMetadata implements M
         this.componentId = componentId;
         if (componentId instanceof IvyModuleComponentIdentifier) {
             this.moduleVersionId = IvyModuleVersionIdentifier.newId(componentId);
-        }
-        else {
+        } else {
             this.moduleVersionId = DefaultModuleVersionIdentifier.newId(componentId);
         }
     }
