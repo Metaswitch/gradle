@@ -53,4 +53,10 @@ public interface IvyDependency {
      * @since 3.1
      */
     boolean isTransitive();
+
+    /**
+     * TODO
+     * @return the branch for this dependency
+     */
+    String getBranch();
 }
