@@ -31,7 +31,7 @@ public class DefaultIvyDependency implements IvyDependencyInternal {
     private final String organisation;
     private final String module;
     private final String revision;
-    private final String confMapping;
+    private String confMapping;
     private final boolean transitive;
     private final String branch;
     private final List<DependencyArtifact> artifacts = new ArrayList<DependencyArtifact>();
@@ -118,5 +118,9 @@ public class DefaultIvyDependency implements IvyDependencyInternal {
     @Override
     public ImmutableAttributes getAttributes() {
         return attributes;
+    }
+
+    public void setConfMapping(String confMapping) {
+        this.confMapping = confMapping;
     }
 }
