@@ -27,4 +27,6 @@ public interface IvyDependencyInternal extends IvyDependency {
     Iterable<ExcludeRule> getExcludeRules();
 
     ImmutableAttributes getAttributes();
+
+    void setConfMapping(String confMapping);
 }
