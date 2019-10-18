@@ -29,4 +29,6 @@ public interface IvyDependencyInternal extends IvyDependency {
     ImmutableAttributes getAttributes();
 
     String getProjectPath();
+
+    void setConfMapping(String confMapping);
 }

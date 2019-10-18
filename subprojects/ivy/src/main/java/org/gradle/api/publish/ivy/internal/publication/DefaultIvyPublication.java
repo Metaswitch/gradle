@@ -406,7 +406,11 @@ public class DefaultIvyPublication implements IvyPublicationInternal {
         if (confMappingTarget == null) {
             confMappingTarget = Dependency.DEFAULT_CONFIGURATION;
         }
-        return conf + "->" + confMappingTarget;
+        if (conf.equals(confMappingTarget)) {
+            return confMappingTarget;
+        } else {
+            return conf + "->" + confMappingTarget;
+        }
     }
 
     /**

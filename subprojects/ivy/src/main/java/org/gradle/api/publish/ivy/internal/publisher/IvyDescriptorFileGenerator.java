@@ -48,6 +48,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class IvyDescriptorFileGenerator {
     private static final String IVY_FILE_ENCODING = "UTF-8";
@@ -257,7 +258,7 @@ public class IvyDescriptorFileGenerator {
 
     private void writeDependencies(OptionalAttributeXmlWriter xmlWriter) throws IOException {
         xmlWriter.startElement("dependencies");
-        for (IvyDependencyInternal dependency : dependencies) {
+        for (IvyDependencyInternal dependency : combineDuplicateDependencies()) {
             String org = dependency.getOrganisation();
             String module = dependency.getModule();
             String projectPath  = dependency.getProjectPath();
@@ -323,6 +324,32 @@ public class IvyDescriptorFileGenerator {
             .attribute("module", excludeRule.getModule())
             .attribute("conf", excludeRule.getConf())
             .endElement();
+    }
+
+    private List<IvyDependencyInternal> combineDuplicateDependencies() {
+        List<IvyDependencyInternal> combinedDependencies = new ArrayList<>();
+        for (IvyDependencyInternal dependency : dependencies) {
+            boolean found = false;
+            for (IvyDependencyInternal combinedDependency : combinedDependencies) {
+                if (Objects.equals(dependency.getOrganisation(), combinedDependency.getOrganisation())
+                    && Objects.equals(dependency.getModule(), combinedDependency.getModule())
+                    && Objects.equals(dependency.getRevision(), combinedDependency.getRevision())
+                    && Objects.equals(dependency.isTransitive(), combinedDependency.isTransitive())
+                    && Objects.equals(dependency.getBranch(), combinedDependency.getBranch())
+                    && Objects.equals(dependency.getArtifacts(), combinedDependency.getArtifacts())
+                    && Objects.equals(dependency.getExcludeRules(), combinedDependency.getExcludeRules())
+                    && Objects.equals(dependency.getAttributes(), combinedDependency.getAttributes())) {
+
+                    //Dependencies are identical other than the confMapping
+                    found = true;
+                    combinedDependency.setConfMapping(combinedDependency.getConfMapping() + ";" + dependency.getConfMapping());
+                }
+            }
+            if (!found) {
+                combinedDependencies.add(dependency);
+            }
+        }
+        return combinedDependencies;
     }
 
     private static class OptionalAttributeXmlWriter extends SimpleXmlWriter {
