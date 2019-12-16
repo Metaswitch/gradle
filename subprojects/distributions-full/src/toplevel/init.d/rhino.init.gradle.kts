@@ -17,21 +17,46 @@
 logger.lifecycle("You are running a Metaswitch SEG build of gradle")
 
 settingsEvaluated {
-    val repoHost: String by settings
-    val repoUsername: String by settings
-    val repoPassword: String by settings
+    fun getRepoHost(): String {
+        return try {
+            val repoHost: String by settings
+            repoHost
+        } catch (e: InvalidUserCodeException) {
+            throw NoSuchElementException("Property 'repoHost' must be set (usually in ${settings.gradle.gradleUserHomeDir}/gradle.properties)")
+        }
+    }
+    fun getRepoUsername(): String {
+        return try {
+            val repoUsername: String by settings
+            repoUsername
+        } catch (e: InvalidUserCodeException) {
+            throw NoSuchElementException("Property 'repoUsername' must be set (usually in ${settings.gradle.gradleUserHomeDir}/gradle.properties)")
+        }
+    }
+    fun getRepoPassword(): String {
+        return try {
+            val repoPassword: String by settings
+            repoPassword
+        } catch (e: InvalidUserCodeException) {
+            throw NoSuchElementException("Property 'repoPassword' must be set (usually in ${settings.gradle.gradleUserHomeDir}/gradle.properties)")
+        }
+    }
+
+    val repoHost: String = getRepoHost()
+    val repoUsername: String = getRepoUsername()
+    val repoPassword: String = getRepoPassword()
     val localRepoUri = uri("file:///${gradle.gradleUserHomeDir}/ivy-local")
 
     fun getRepoUri(): String {
-        try {
+        return try {
             //Allow the full uri to be overridden if present
             val repoUri: String by settings
-            return repoUri
+            repoUri
         } catch (e: InvalidUserCodeException) {
-            return "https://$repoHost/artifactory"
+            "https://$repoHost/artifactory"
         }
     }
-    var uri: String = getRepoUri()
+    val repoUri: String = getRepoUri()
 
     settings.pluginManagement {
         repositories {
@@ -41,7 +66,7 @@ settingsEvaluated {
             }
             ivy {
                 name = "Artifactory"
-                url = uri("$uri/gradle-plugins")
+                url = uri("$repoUri/gradle-plugins")
                 credentials {
                     username = repoUsername
                     password = repoPassword
