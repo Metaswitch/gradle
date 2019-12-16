@@ -75,4 +75,22 @@ settingsEvaluated {
             gradlePluginPortal()
         }
     }
+
+    val isCiServer = System.getenv().containsKey("BUILD_NUMBER")
+    buildCache {
+        local {
+            isEnabled = !isCiServer
+            logger.info("Local build cache enabled: $isEnabled")
+        }
+        remote<HttpBuildCache> {
+            url = uri("$repoUri/gradle-buildcache/")
+            credentials {
+                username = repoUsername
+                password = repoPassword
+            }
+            isPush = isCiServer
+            logger.info("Using remote build cache: $url")
+            logger.info("  With push enabled: $isPush")
+        }
+    }
 }
