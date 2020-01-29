@@ -45,7 +45,17 @@ settingsEvaluated {
     val repoHost: String = getRepoHost()
     val repoUsername: String = getRepoUsername()
     val repoPassword: String = getRepoPassword()
-    val localRepoUri = uri("file:///${gradle.gradleUserHomeDir}/ivy-local")
+
+    fun getLocalRepoUri(): String {
+        return try {
+            //Allow the local repo uri to be overridden if present
+            val localRepoUri: String by settings
+            localRepoUri
+        } catch (e: InvalidUserCodeException) {
+            "file:///${System.getProperty("user.home")}/.ivy2/opencloud-local"
+        }
+    }
+    val localRepoUri = uri(getLocalRepoUri())
 
     fun getRepoUri(): String {
         return try {
