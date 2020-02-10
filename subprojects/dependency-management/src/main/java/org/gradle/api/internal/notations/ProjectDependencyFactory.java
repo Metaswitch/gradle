@@ -50,14 +50,15 @@ public class ProjectDependencyFactory {
 
         protected ProjectDependency parseMap(
             @MapKey("path") String path,
-            @MapKey("configuration") @Nullable String configuration
+            @MapKey("configuration") @Nullable String configuration,
+            @MapKey("branch") @Nullable String branch
         ) {
-            return factory.create(projectFinder.getProject(path), configuration);
+            return factory.create(projectFinder.getProject(path), configuration, branch);
         }
 
         @Override
         public void describe(DiagnosticsVisitor visitor) {
-            visitor.candidate("Map with mandatory 'path' and optional 'configuration' key").example("[path: ':someProj', configuration: 'someConf']");
+            visitor.candidate("Map with mandatory 'path', optional 'configuration' key, and optional 'branch'").example("[path: ':someProj', configuration: 'someConf', branch: 'someBranch']");
         }
     }
 }
