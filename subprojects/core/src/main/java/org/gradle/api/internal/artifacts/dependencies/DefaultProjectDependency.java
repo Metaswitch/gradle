@@ -35,6 +35,7 @@ import org.gradle.internal.deprecation.DeprecationLogger;
 import org.gradle.internal.exceptions.ConfigurationNotConsumableException;
 import org.gradle.util.GUtil;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +45,8 @@ public class DefaultProjectDependency extends AbstractModuleDependency implement
     private final ProjectInternal dependencyProject;
     private final boolean buildProjectDependencies;
     private final ProjectAccessListener projectAccessListener;
+    @Nullable
+    private String branch;
 
     public DefaultProjectDependency(ProjectInternal dependencyProject, ProjectAccessListener projectAccessListener, boolean buildProjectDependencies) {
         this(dependencyProject, null, projectAccessListener, buildProjectDependencies);
@@ -77,6 +80,15 @@ public class DefaultProjectDependency extends AbstractModuleDependency implement
         return dependencyProject.getVersion().toString();
     }
 
+    @Nullable
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(@Nullable String branch) {
+        this.branch = branch;
+    }
+
     @Override
     public Configuration findProjectConfiguration() {
         ConfigurationContainer dependencyConfigurations = getDependencyProject().getConfigurations();
@@ -104,6 +116,7 @@ public class DefaultProjectDependency extends AbstractModuleDependency implement
         DefaultProjectDependency copiedProjectDependency = new DefaultProjectDependency(dependencyProject,
             getTargetConfiguration(), projectAccessListener, buildProjectDependencies);
         copyTo(copiedProjectDependency);
+        copiedProjectDependency.setBranch(branch);
         return copiedProjectDependency;
     }
 
@@ -184,6 +197,9 @@ public class DefaultProjectDependency extends AbstractModuleDependency implement
             return false;
         }
         if (!Objects.equal(getRequestedCapabilities(), that.getRequestedCapabilities())) {
+            return false;
+        }
+        if (!Objects.equal(this.getBranch(), that.getBranch())) {
             return false;
         }
         return true;

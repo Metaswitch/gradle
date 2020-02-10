@@ -224,22 +224,25 @@ class ClientModuleScope(
         (dependencyHandler.create(notation) as ExternalModuleDependency).apply(dependencyConfiguration)
 }
 
-
 /**
  * Creates a dependency on a project without adding it to a configuration.
  *
  * @param path the path of the project to be added as a dependency.
  * @param configuration the optional configuration of the project to be added as a dependency.
+ * @param branch the optional branch of the project to be added as a dependency. If unset attempts to read from project property named 'defaultIvyBranchName'.
  * @return The dependency.
  */
 fun DependencyHandler.project(
     path: String,
-    configuration: String? = null
+    configuration: String? = null,
+    branch: String? = null
 ): ProjectDependency =
 
     uncheckedCast(
         project(
-            if (configuration != null) mapOf("path" to path, "configuration" to configuration)
+            if (configuration != null && branch != null) mapOf("path" to path, "configuration" to configuration, "branch" to branch)
+            else if (configuration != null) mapOf("path" to path, "configuration" to configuration)
+            else if (branch != null) mapOf("path" to path, "branch" to branch)
             else mapOf("path" to path)
         )
     )

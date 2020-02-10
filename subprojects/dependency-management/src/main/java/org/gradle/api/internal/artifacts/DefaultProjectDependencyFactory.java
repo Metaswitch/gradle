@@ -26,6 +26,8 @@ import org.gradle.initialization.ProjectAccessListener;
 import org.gradle.internal.reflect.Instantiator;
 import org.gradle.internal.typeconversion.NotationParser;
 
+import javax.annotation.Nullable;
+
 public class DefaultProjectDependencyFactory {
     private final ProjectAccessListener projectAccessListener;
     private final Instantiator instantiator;
@@ -41,9 +43,15 @@ public class DefaultProjectDependencyFactory {
         this.attributesFactory = attributesFactory;
     }
 
-    public ProjectDependency create(ProjectInternal project, String configuration) {
+    public ProjectDependency create(ProjectInternal project, @Nullable String configuration, @Nullable String branch) {
         DefaultProjectDependency projectDependency = instantiator.newInstance(DefaultProjectDependency.class, project, configuration, projectAccessListener, buildProjectDependencies);
         prepareProject(projectDependency);
+
+        if (branch == null) {
+            branch = (String) project.findProperty("defaultIvyBranchName");
+        }
+        projectDependency.setBranch(branch);
+
         return projectDependency;
     }
 

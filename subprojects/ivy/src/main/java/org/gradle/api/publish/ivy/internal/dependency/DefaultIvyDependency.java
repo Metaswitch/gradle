@@ -38,23 +38,23 @@ public class DefaultIvyDependency implements IvyDependencyInternal {
     private final List<ExcludeRule> excludeRules = new ArrayList<ExcludeRule>();
     private final ImmutableAttributes attributes;
 
-    public DefaultIvyDependency(String organisation, String module, String revision, String confMapping, boolean transitive) {
+    public DefaultIvyDependency(String organisation, String module, String revision, String confMapping, String branch, boolean transitive) {
         this.organisation = organisation;
         this.module = module;
         this.revision = Strings.nullToEmpty(revision);
         this.confMapping = confMapping;
         this.transitive = transitive;
-        this.branch = null;
+        this.branch = branch;
         this.attributes = ImmutableAttributes.EMPTY;
     }
 
-    public DefaultIvyDependency(String organisation, String module, String revision, String confMapping, boolean transitive, Collection<DependencyArtifact> artifacts) {
-        this(organisation, module, revision, confMapping, transitive);
+    public DefaultIvyDependency(String organisation, String module, String revision, String confMapping, String branch, boolean transitive, Collection<DependencyArtifact> artifacts) {
+        this(organisation, module, revision, confMapping, branch, transitive);
         this.artifacts.addAll(artifacts);
     }
 
-    public DefaultIvyDependency(String organisation, String module, String revision, String confMapping, boolean transitive, Collection<DependencyArtifact> artifacts, Collection<ExcludeRule> excludeRules) {
-        this(organisation, module, revision, confMapping, transitive, artifacts);
+    public DefaultIvyDependency(String organisation, String module, String revision, String confMapping, String branch, boolean transitive, Collection<DependencyArtifact> artifacts, Collection<ExcludeRule> excludeRules) {
+        this(organisation, module, revision, confMapping, branch, transitive, artifacts);
         this.excludeRules.addAll(excludeRules);
     }
 

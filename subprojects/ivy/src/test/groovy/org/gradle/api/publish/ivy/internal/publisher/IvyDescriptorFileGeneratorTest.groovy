@@ -263,8 +263,8 @@ class IvyDescriptorFileGeneratorTest extends Specification {
 
     def "writes supplied dependencies"() {
         when:
-        generator.addDependency(new DefaultIvyDependency('dep-group', 'dep-name-1', 'dep-version', "confMappingProject", true))
-        generator.addDependency(new DefaultIvyDependency('dep-group', 'dep-name-2', 'dep-version', null, true))
+        generator.addDependency(new DefaultIvyDependency('dep-group', 'dep-name-1', 'dep-version', "confMappingProject", null, true))
+        generator.addDependency(new DefaultIvyDependency('dep-group', 'dep-name-2', 'dep-version', null, null, true))
 
         then:
         with (ivyXml) {
@@ -298,7 +298,7 @@ class IvyDescriptorFileGeneratorTest extends Specification {
         artifact2.classifier >> "classy"
 
         and:
-        generator.addDependency(new DefaultIvyDependency('dep-group', 'dep-name', 'dep-version', "confMapping", true, [artifact1, artifact2]))
+        generator.addDependency(new DefaultIvyDependency('dep-group', 'dep-name', 'dep-version', "confMapping", null, true, [artifact1, artifact2]))
 
         then:
         includesMavenNamespace()
@@ -343,7 +343,7 @@ class IvyDescriptorFileGeneratorTest extends Specification {
 
 
         when:
-        generator.addDependency(new DefaultIvyDependency('dep-group', 'dep-name-1', 'dep-version', "confMappingProject", true, [], [exclude1, exclude2, exclude3]))
+        generator.addDependency(new DefaultIvyDependency('dep-group', 'dep-name-1', 'dep-version', "confMappingProject", null, true, [], [exclude1, exclude2, exclude3]))
 
         then:
         with (ivyXml) {
