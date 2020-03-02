@@ -388,7 +388,8 @@ public class DefaultIvyPublication implements IvyPublicationInternal {
 
     private String confMappingFor(UsageContext usageContext, ModuleDependency dependency) {
         String conf = mapUsageNameToIvyConfiguration(usageContext.getName());
-        String confMappingTarget = mapUsageNameToIvyConfiguration(dependency.getTargetConfiguration());
+        //Don't map the target configuration otherwise we potentially lose dependency information
+        String confMappingTarget = dependency.getTargetConfiguration();
 
         // If the following code is activated implementation/runtime separation will be published to ivy. This however is a breaking change.
         //

@@ -337,9 +337,8 @@ public class IvyDescriptorFileGenerator {
                     && Objects.equals(dependency.isTransitive(), combinedDependency.isTransitive())
                     && Objects.equals(dependency.getBranch(), combinedDependency.getBranch())
                     && Objects.equals(dependency.getArtifacts(), combinedDependency.getArtifacts())
-                    && Objects.equals(dependency.getExcludeRules(), combinedDependency.getExcludeRules())
-                    && Objects.equals(dependency.getAttributes(), combinedDependency.getAttributes())) {
-
+                    && Objects.equals(dependency.getExcludeRules(), combinedDependency.getExcludeRules())) {
+                    //Ignore differences in attributes as they don't add anything to the resulting ivy.xml file
                     //Dependencies are identical other than the confMapping
                     found = true;
                     combinedDependency.setConfMapping(combinedDependency.getConfMapping() + ";" + dependency.getConfMapping());
