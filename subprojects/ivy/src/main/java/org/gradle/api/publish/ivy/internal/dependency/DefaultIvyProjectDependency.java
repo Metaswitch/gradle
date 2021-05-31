@@ -69,7 +69,17 @@ public class DefaultIvyProjectDependency implements IvyDependencyInternal {
     }
 
     @Override
+    public String getBranch() {
+        return delegate.getBranch();
+    }
+
+    @Override
     public String getProjectPath() {
         return projectPath;
+    }
+
+    @Override
+    public void setConfMapping(String confMapping) {
+        delegate.setConfMapping(confMapping);
     }
 }

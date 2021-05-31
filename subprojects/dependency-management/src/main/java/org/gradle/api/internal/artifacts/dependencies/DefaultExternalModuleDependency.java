@@ -41,6 +41,7 @@ public class DefaultExternalModuleDependency extends AbstractExternalModuleDepen
 
     public DefaultExternalModuleDependency(ModuleIdentifier id, MutableVersionConstraint versionConstraint) {
         super(id, versionConstraint);
+        this.branch = null;
     }
 
     @Override
